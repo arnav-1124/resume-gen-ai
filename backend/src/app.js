@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 
@@ -11,6 +12,10 @@ const authRouter = require("./routes/auth.routes.js");
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
 
 // Prefixing routes
 app.use("/api/auth", authRouter);
