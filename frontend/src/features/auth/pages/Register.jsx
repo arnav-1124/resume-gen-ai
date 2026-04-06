@@ -1,10 +1,32 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const Register = () => {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const { loading, handleRegister } = useAuth();
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle registration logic here
+    await handleRegister({ username, email, password });
+    navigate("/");
   };
+
+  if (loading) {
+    return (
+      <main>
+        <div className="loading-wrap" role="status" aria-live="polite">
+          <span className="loader-ring" aria-hidden="true"></span>
+          <h1 className="loading">Signing you up...</h1>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -17,6 +39,8 @@ const Register = () => {
               type="text"
               id="username"
               name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
               required
             />
@@ -27,6 +51,8 @@ const Register = () => {
               type="email"
               id="email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter email "
               required
             />
@@ -37,6 +63,8 @@ const Register = () => {
               type="password"
               id="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
               required
             />
